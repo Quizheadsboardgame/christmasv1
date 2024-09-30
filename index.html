@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHRISTMAS QUIZ 1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif; /* Standard font */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: transparent; /* Fully transparent background */
+            color: black; /* Standard text color */
+            text-align: center;
+        }
+
+        #quiz-container {
+            background-color: transparent; /* Fully transparent container */
+            padding: 20px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        #logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .answer {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: white; /* Change the answer color to white */
+        }
+
+        #next-button {
+            background-color: white; /* Change background color to white */
+            color: black; /* Change text color to black for visibility */
+            border: 2px solid #ff9900; /* Optional: Add a border for better visibility */
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #next-button:hover {
+            background-color: #ffcc00; /* Change hover color for better effect */
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .fadeOut {
+            animation: fadeOut 0.5s forwards;
+        }
+
+        .fadeIn {
+            animation: fadeIn 0.5s forwards;
+        }
+    </style>
+</head>
+<body>
+
+<div id="quiz-container">
+    <img id="logo" src="https://i.imgur.com/cyZ0Z21.png" alt="George Michael Logo">
+    <h1>CHRISTMAS QUIZ 1</h1>
+    <div id="question-container">
+        <div class="question" id="question">Loading question...</div>
+        <div class="answer" id="answer">Loading answer...</div>
+        <button id="next-button" onclick="nextQuestion()">Next Question</button>
+    </div>
+</div>
+
+<script>
+    // Question and answers data
+    const quizData = [
+        { question: 'In the song “Frosty the Snowman,” what made Frosty come to life?', answer: 'An old silk hat' },
+        { question: 'What Christmas decoration was originally made from strands of silver?', answer: 'Tinsel' },
+        { question: 'Who played George Bailey in the Christmas classic “It’s a Wonderful Life?”', answer: 'Jimmy Stewart' },
+        { question: 'Per a recent holiday fad, what “spy” hides around the house, reporting back to Santa on who has been naughty and nice?', answer: 'The Elf on the Shelf' },
+        { question: 'What Christmas beverage is also known as “milk punch?”', answer: 'Eggnog' },
+        { question: 'One of Santa’s reindeer shares a name with a famous symbol of Valentine’s Day. Which reindeer is that?', answer: 'Cupid' },
+        { question: 'What Christmas-themed ballet premiered in Saint Petersburg, Russia in 1892?', answer: 'The Nutcracker' },
+        { question: 'In 1981, Bob and Doug McKenzie released their own version of a classic Christmas song. Which song is that?', answer: 'The Twelve Days of Christmas' },
+        { question: 'What animated 2004 film is about a train that carries kids to the North Pole on Christmas Eve?', answer: 'The Polar Express' },
+        { question: 'What much-reviled Christmas edible is known for its long shelf life?', answer: 'Fruitcake' },
+        { question: 'What’s the name of the family featured in National Lampoon’s Christmas Vacation?', answer: 'The Griswolds' },
+        { question: 'What phrase made popular in the book “A Christmas Carol” expresses annoyance with cheery holiday celebrations?', answer: 'Bah humbug!' },
+        { question: 'What cartoon character’s name is used to indicate a small, thin, or just plain undesirable Christmas tree?', answer: 'Charlie Brown' },
+        { question: 'What song was initially condemned by the Roman Catholic Church for allegedly portraying an adulterous affair?', answer: '“I Saw Mommy Kissing Santa Claus”' },
+        { question: 'What beloved Christmas song was recorded by Puerto Rican singer-songwriter José Feliciano in 1970?', answer: 'Feliz Navidad' },
+        { question: 'What’s the name of Rudolph’s girlfriend in the “Rudolph the Red-Nosed Reindeer” television special?', answer: 'Clarice' },
+        { question: 'What science fiction franchise had its own holiday television special in 1978?', answer: 'Star Wars' },
+        { question: 'In “A Christmas Story,” what happens to Ralphie’s friend as a result of a “triple-dog dare” from another classmate?', answer: 'He gets his tongue stuck to a flagpole.' },
+        { question: 'In the United States, over 2 billion of these are sent each year at Christmastime.', answer: 'Christmas cards' },
+        { question: 'What’s the German name for the song known in English as “O Christmas Tree?”', answer: '“O Tannenbaum”' },
+        { question: 'What do children typically get in their stockings if they’re on the Naughty List?', answer: 'A lump of coal' },
+        { question: 'The charity Toys for Tots is run by the reserve force of what branch of the U.S. military?', answer: 'The Marines' },
+        { question: 'The first artificial Christmas tree was made in the 19th century using the feathers of what bird?', answer: 'Goose' },
+        { question: 'In North America, wild reindeer are referred to as what?', answer: 'Caribou' },
+        { question: 'What holiday is celebrated the day after Christmas in the UK, Canada, Australia, and other countries?', answer: 'Boxing Day' },
+        { question: 'In Charles Dickens’ “A Christmas Carol,” what was Mr. Scrooge’s first name?', answer: 'Ebenezer' },
+        { question: 'What Bing Crosby song is the best-selling single ever?', answer: 'White Christmas' },
+        { question: 'In the early 1800s, the first gingerbread houses were reportedly inspired by what famous fairy tale?', answer: 'Hansel and Gretel' },
+        { question: '“Miracle on 34th Street” centers on what real-life department store?', answer: 'Macy’s' },
+        { question: 'In the song “Grandma Got Run Over by a Reindeer,” what “incriminating” evidence was found on Grandma’s back?', answer: 'Claus marks' },
+        { question: 'How many reindeer are featured in the poem “Twas the Night Before Christmas?”', answer: 'Eight (no Rudolph)' },
+        { question: 'What traditional Christmas decoration is actually a parasitic plant?', answer: 'Mistletoe' },
+        { question: 'In “The Muppet Christmas Carol,” who played Scrooge? Hint: It wasn’t a muppet.', answer: 'Michael Caine' },
+        { question: 'What beverage company has been using Santa Claus in its advertising since 1931?', answer: 'Coca-Cola' },
+        { question: 'According to legend, what holiday goodies were shaped to resemble a shepherd’s staff, as a way to remind children of the shepherds who visited baby Jesus?', answer: 'Candy canes' },
+        { question: 'What 2003 film follows a hard-living mall Santa?', answer: '“Bad Santa”' },
+        { question: 'In the Twelve Days of Christmas, what are there eleven of?', answer: 'Pipers piping' },
+        { question: 'Which classic Christmas carol contains the lyric “Strike the harp and join the chorus?”', answer: '“Deck the Halls”' },
+        { question: 'In “The Chipmunk Song,” what do the chipmunks want for Christmas besides a plane that loops the loop?', answer: 'A hula hoop' },
+        { question: 'Which of Santa’s reindeer was the subject of a 1989 movie starring Sam Elliott?', answer: 'Prancer' },
+        { question: 'Whose recording of “Rudolph the Red-Nosed Reindeer” topped the U.S. charts in 1949?', answer: 'Gene Autry' },
+        { question: 'In the song “We Wish You a Merry Christmas,” what type of pudding is called for?', answer: 'Figgy pudding' },
+        { question: '“Mele Kalikimaka” means “Merry Christmas” in what language?', answer: 'Hawaiian' },
+        { question: 'In the 1966 television special “How the Grinch Stole Christmas,” what monster movie legend did the voice for the Grinch?', answer: 'Boris Karloff' },
+        { question: 'In the song “Santa Baby,” the singer asks for a deed to what?', answer: 'A platinum mine' },
+        { question: 'A booklet printed by Montgomery Ward featured the first appearance of what beloved Christmas character?', answer: 'Rudolph the Red-Nosed Reindeer' },
+        { question: 'The celebrated “Christmas Truce” temporarily halted fighting during what war?', answer: 'World War I' },
+        { question: 'In 1996, what toy with origins in Sesame Street was a sensation at Christmastime?', answer: 'Tickle Me Elmo' },
+        { question: 'True or False: Studies show that the average American gains three pounds over the holidays.', answer: 'False. It’s closer to one pound.' },
+        { question: 'What word for Christmas or a Christmas carol was borrowed from French?', answer: 'Noel' },
+        { question: 'In the movie “A Christmas Story,” what was the name of the next-door neighbors whose dogs ate the Christmas turkey?', answer: 'The Bumpuses' },
+        { question: 'What figure from English folklore came to be associated with Santa Claus?', answer: 'Father Christmas' },
+        { question: 'Name the animatronic cassette-playing bear toy that every kid wanted for Christmas in the mid-80s.', answer: 'Teddy Ruxpin' },
+        { question: 'In the 1964 classic “Rudolph the Red-Nosed Reindeer,” what was the name of Rudolph’s faithful elf companion?', answer: 'Hermey' },
+        { question: 'According to the folklore of Austria and other countries, what horned figure punishes naughty children at Christmastime?', answer: 'Krampus' },
+        { question: 'In the TV special “How the Grinch Stole Christmas,” what three words best describe the Grinch?', answer: 'Stink, stank, stunk' },
+        { question: 'What well-known Christmas carol became the first song ever broadcast from space in 1965?', answer: '“Jingle Bells”' },
+        { question: 'In what modern-day country was Saint Nicholas born?', answer: 'Turkey' },
+        { question: 'What Christmas carol does the Peanuts gang sing at the end of “A Charlie Brown Christmas?”', answer: '“Hark! The Herald Angels Sing”' },
+        { question: '“Twas the Night Before Christmas” was originally published under what name?', answer: '“A Visit from St. Nicholas”' },
+        { question: 'What holiday movie sequel includes a cameo by Donald Trump?', answer: '“Home Alone 2”' },
+        { question: 'What famous Christian reformer is credited with being the first person to put lights on a Christmas tree?', answer: 'Martin Luther' },
+        { question: 'According to Buddy the Elf, what are the four main food groups?', answer: 'Candy, candy canes, candy corns, and syrup' },
+        { question: 'What unlikely duo recorded the song “Peace on Earth/Little Drummer Boy” in 1977?', answer: 'Bing Crosby and David Bowie' },
+        { question: 'What environmentalist U.S. president banned Christmas trees at the White House?', answer: 'President Theodore Roosevelt' },
+        { question: 'Who recorded the melancholy holiday hit “Hard Candy Christmas” in 1982?', answer: 'Dolly Parton' },
+        { question: 'In “The Nightmare Before Christmas,” what does Jack Skellington mistakenly call Old Saint Nick?', answer: 'Sandy Claws' }
+    ];
+
+    let currentQuestionIndex = 0;
+    let usedQuestions = [];
+    
+    // Shuffle the questions in random order
+    function shuffleQuestions() {
+        usedQuestions = [];
+        const shuffledData = quizData.sort(() => Math.random() - 0.5);
+        return shuffledData;
+    }
+
+    let shuffledQuizData = shuffleQuestions();
+
+    function showQuestion() {
+        const questionContainer = document.getElementById("question");
+        const answerContainer = document.getElementById("answer");
+
+        if (currentQuestionIndex < shuffledQuizData.length) {
+            questionContainer.innerText = shuffledQuizData[currentQuestionIndex].question;
+            answerContainer.innerText = shuffledQuizData[currentQuestionIndex].answer;
+
+            questionContainer.classList.remove('fadeOut');
+            answerContainer.classList.remove('fadeOut');
+
+            questionContainer.classList.add('fadeIn');
+            answerContainer.classList.add('fadeIn');
+        }
+    }
+
+    function nextQuestion() {
+        const questionContainer = document.getElementById("question");
+        const answerContainer = document.getElementById("answer");
+
+        currentQuestionIndex++;
+        
+        questionContainer.classList.remove('fadeIn');
+        answerContainer.classList.remove('fadeIn');
+
+        questionContainer.classList.add('fadeOut');
+        answerContainer.classList.add('fadeOut');
+
+        setTimeout(() => {
+            if (currentQuestionIndex < shuffledQuizData.length) {
+                showQuestion();
+            } else {
+                // Reset the quiz
+                currentQuestionIndex = 0;
+                shuffledQuizData = shuffleQuestions(); // Reshuffle questions
+                showQuestion(); // Show the first question again
+            }
+        }, 500);
+    }
+
+    // Show the first question on page load
+    showQuestion();
+</script>
+
+</body>
+</html>
