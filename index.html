@@ -177,40 +177,43 @@
         { question: 'In “The Nightmare Before Christmas,” what does Jack Skellington mistakenly call Old Saint Nick?', answer: 'Sandy Claws' }
     ];
 
-    let currentQuestionIndex = 0;
-    let usedQuestions = [];
-    
-    // Shuffle the questions in random order
-    function shuffleQuestions() {
-        usedQuestions = [];
-        const shuffledData = quizData.sort(() => Math.random() - 0.5);
-        return shuffledData;
+    let shuffledQuestions = [];
+    let currentQuestion = 0;
+
+    // Function to shuffle an array
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+        }
     }
 
-    let shuffledQuizData = shuffleQuestions();
+    // Initialize quiz
+    function initQuiz() {
+        shuffledQuestions = [...quizData]; // Create a copy of the original data
+        shuffleArray(shuffledQuestions); // Shuffle the questions
+        currentQuestion = Math.floor(Math.random() * shuffledQuestions.length); // Start from a random question
+        showQuestion();
+    }
 
     function showQuestion() {
         const questionContainer = document.getElementById("question");
         const answerContainer = document.getElementById("answer");
 
-        if (currentQuestionIndex < shuffledQuizData.length) {
-            questionContainer.innerText = shuffledQuizData[currentQuestionIndex].question;
-            answerContainer.innerText = shuffledQuizData[currentQuestionIndex].answer;
+        questionContainer.innerText = shuffledQuestions[currentQuestion].question;
+        answerContainer.innerText = shuffledQuestions[currentQuestion].answer;
 
-            questionContainer.classList.remove('fadeOut');
-            answerContainer.classList.remove('fadeOut');
+        questionContainer.classList.remove('fadeOut');
+        answerContainer.classList.remove('fadeOut');
 
-            questionContainer.classList.add('fadeIn');
-            answerContainer.classList.add('fadeIn');
-        }
+        questionContainer.classList.add('fadeIn');
+        answerContainer.classList.add('fadeIn');
     }
 
     function nextQuestion() {
         const questionContainer = document.getElementById("question");
         const answerContainer = document.getElementById("answer");
 
-        currentQuestionIndex++;
-        
         questionContainer.classList.remove('fadeIn');
         answerContainer.classList.remove('fadeIn');
 
@@ -218,19 +221,21 @@
         answerContainer.classList.add('fadeOut');
 
         setTimeout(() => {
-            if (currentQuestionIndex < shuffledQuizData.length) {
+            if (shuffledQuestions.length > 1) {
+                // Remove the current question from the array
+                shuffledQuestions.splice(currentQuestion, 1); // Remove used question
+                currentQuestion = Math.floor(Math.random() * shuffledQuestions.length); // Pick new random question
                 showQuestion();
             } else {
-                // Reset the quiz
-                currentQuestionIndex = 0;
-                shuffledQuizData = shuffleQuestions(); // Reshuffle questions
-                showQuestion(); // Show the first question again
+                questionContainer.innerText = "Thank you for playing!";
+                answerContainer.innerText = "";
+                document.getElementById("next-button").style.display = "none"; // Hide the next button
             }
         }, 500);
     }
 
-    // Show the first question on page load
-    showQuestion();
+    // Start the quiz on page load
+    initQuiz();
 </script>
 
 </body>
